@@ -19,10 +19,16 @@ st.set_page_config(page_title='MNIST Classification using Deep Neural Network')
 
 # Set the title 
 st.title('MNIST Classification using Deep Neural Network')
-'© Copyright 2021 Usama Bakry (u.bakry@icloud.com)'
+st.markdown('© Copyright 2021 Usama Bakry (u.bakry@icloud.com)')
+st.markdown('----------')
+
+# Set welcome sentance on app start
+welcome = st.empty()
+welcome.markdown('Hello, please train your model after customize the input parameters.')
 
 # Set the number of neurons, the number of epochs, and the activation number
-num_neurons = st.sidebar.slider("Number of neurons in the hidden layer:",1,64)
+st.sidebar.header("Input parameters")
+num_neurons = st.sidebar.slider("Number of neurons in the hidden layer",1,64)
 num_epochs = st.sidebar.slider("Number of epochs",1,10)
 activation = st.sidebar.selectbox(
     "Activation function",
@@ -30,9 +36,10 @@ activation = st.sidebar.selectbox(
 )
 
 # Train the model
-if st.button('Train the model'):
-
-    "Please wait..."
+if st.sidebar.button('Train the model'):
+    welcome.empty()
+    please_text = st.empty()
+    please_text.markdown("Please wait...")
 
     # Load MNIST data
     f = gzip.open('data/mnist.pkl.gz', 'rb')
@@ -70,10 +77,12 @@ if st.button('Train the model'):
     # Run the model
     model.fit(X_train,y_train,validation_data=(X_test,y_test),epochs=num_epochs,callbacks=[save_cp,output_cp])
 
-    "Done. Click on \"Evaluate the model\" button."
+    please_text.empty()
+    st.markdown("Done. Click on \"Evaluate the model\" button.")
 
 # Evaluate the model
-if st.button('Evaluate the model'):
+if st.sidebar.button('Evaluate the model'):
+    welcome.empty()
 
     # Read the output file
     output = pd.read_csv('output.csv')
